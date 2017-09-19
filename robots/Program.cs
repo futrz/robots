@@ -10,26 +10,31 @@ namespace robots
     {
         static void Main(string[] args)
         {
-            //int cyferka = 3;
-            //cyferka = Zwieksz(cyferka) + Zwieksz(cyferka);
-            //Console.WriteLine(cyferka);
-            NapiszCzasem(3);
-            NapiszCzasem(7);
-
-            int i;
-            i = 0;
-            while(i < 10)
+            int PlayerX = 10;
+            ConsoleKeyInfo b;
+            while (true)
             {
-                Console.WriteLine(i);
-                i++;
+               
+                
+               
+                b = Console.ReadKey();
+                if (b.Key == ConsoleKey.LeftArrow)
+                {
+                    PlayerX--;
+                }
+                if (b.Key == ConsoleKey.RightArrow)
+                {
+                    PlayerX++;
+                }
+                if (b.Key == ConsoleKey.Escape)
+                {
+                    break;
+                }
+                Console.Clear();
+                Console.SetCursorPosition(PlayerX, 1);
+                Console.Write("o");
             }
-
-            for(i=0; i<10; i++)
-            {
-                Console.WriteLine(i);
-            }
-
-            Console.ReadKey();
+            
         }
 
         static void NapiszCzasem(int a)
@@ -81,6 +86,26 @@ namespace robots
             Console.WriteLine(numerek);
             Napisz(numerek);
             NapiszWiecej(numerek);
+            Console.ReadKey();
+            //int cyferka = 3;
+            //cyferka = Zwieksz(cyferka) + Zwieksz(cyferka);
+            //Console.WriteLine(cyferka);
+            NapiszCzasem(3);
+            NapiszCzasem(7);
+
+            int i;
+            i = 0;
+            while (i < 10)
+            {
+                Console.WriteLine(i);
+                i++;
+            }
+
+            for (i = 0; i < 10; i++)
+            {
+                Console.WriteLine(i);
+            }
+
             Console.ReadKey();
         }
 
