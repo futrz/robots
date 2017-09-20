@@ -11,28 +11,51 @@ namespace robots
         static void Main(string[] args)
         {
             int PlayerX = 10;
+            int PlayerY = 10;
             ConsoleKeyInfo b;
+            int Licznik = 0;
             while (true)
             {
                
                 
                
                 b = Console.ReadKey();
-                if (b.Key == ConsoleKey.LeftArrow)
+                
+                if (b.Key == ConsoleKey.LeftArrow && PlayerX > 0)
                 {
                     PlayerX--;
+                    Licznik++;
                 }
-                if (b.Key == ConsoleKey.RightArrow)
+                if (b.Key == ConsoleKey.RightArrow && PlayerX < Console.WindowWidth - 1)
                 {
                     PlayerX++;
+                    Licznik++;
                 }
+                if (b.Key == ConsoleKey.DownArrow && PlayerY < Console.WindowHeight - 2)
+                {
+                    PlayerY++;
+                    Licznik++;
+                }
+                if (b.Key == ConsoleKey.UpArrow && PlayerY > 0)
+                {
+                    PlayerY--;
+                    Licznik++;
+                }
+
+               // if (PlayerX < 0)
+                //{
+                //    PlayerX = 0;
+               // }
+
                 if (b.Key == ConsoleKey.Escape)
                 {
                     break;
                 }
                 Console.Clear();
-                Console.SetCursorPosition(PlayerX, 1);
+                Console.SetCursorPosition(PlayerX, PlayerY);
                 Console.Write("o");
+                Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                Console.Write("Ilosc biegania: " + Licznik);
             }
             
         }
