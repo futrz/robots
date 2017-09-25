@@ -6,6 +6,30 @@ using System.Threading.Tasks;
 
 namespace robots
 {
+    class Robot
+    {
+        int X = 0;
+        int Y = 0;
+
+        public void SetPosition(int newX, int newY)
+        {
+            X = newX;
+            Y = newY;
+        }
+
+        public void RadnomizePosition()
+        {
+            Random rnd = new Random();
+            SetPosition(rnd.Next(1, 80), rnd.Next(1, 25));
+        }
+
+        public void Draw()
+        {
+            Console.SetCursorPosition(X, Y);
+            Console.Write("T");
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -14,11 +38,23 @@ namespace robots
             int PlayerY = 10;
             ConsoleKeyInfo b;
             int Licznik = 0;
+            int LicznikP = 0;
+            Robot r1 = new Robot();
+            r1.SetPosition(5, 5);
+            Robot r2 = new Robot();
+            r2.RadnomizePosition();
+
             while (true)
             {
-               
-                
-               
+                Console.Clear();
+                Console.SetCursorPosition(PlayerX, PlayerY);
+                Console.Write("o");
+                r1.Draw();
+                r2.Draw();
+                Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                Console.Write("Bieganie w prawo albo w dol: " + LicznikP);
+                Console.Write(" | Bieganie gdziekolwiek: " + Licznik);
+
                 b = Console.ReadKey();
                 
                 if (b.Key == ConsoleKey.LeftArrow && PlayerX > 0)
@@ -30,11 +66,13 @@ namespace robots
                 {
                     PlayerX++;
                     Licznik++;
+                    LicznikP++;
                 }
                 if (b.Key == ConsoleKey.DownArrow && PlayerY < Console.WindowHeight - 2)
                 {
                     PlayerY++;
                     Licznik++;
+                    LicznikP++;
                 }
                 if (b.Key == ConsoleKey.UpArrow && PlayerY > 0)
                 {
@@ -51,11 +89,8 @@ namespace robots
                 {
                     break;
                 }
-                Console.Clear();
-                Console.SetCursorPosition(PlayerX, PlayerY);
-                Console.Write("o");
-                Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                Console.Write("Ilosc biegania: " + Licznik);
+                
+                
             }
             
         }
