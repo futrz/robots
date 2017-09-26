@@ -30,54 +30,90 @@ namespace robots
         }
     }
 
+    class Player
+    {
+        int X = 10;
+        int Y = 10;
+        public int Moves = 0;
+
+        public void Draw()
+        {
+            Console.SetCursorPosition(X, Y);
+            if (Moves > 10)
+                Console.Write("ó");
+            else
+                Console.Write("o");
+        }
+
+        public void MoveBy(int dX,  int dY)
+        {
+            X = X + dX;
+            Y = Y + dY;
+
+            if (X < 0)
+            {
+                X = 0;
+            }
+
+            if (X > Console.WindowWidth - 1)
+            {
+                X = Console.WindowWidth - 1;
+            }
+
+            if (Y < 0)
+            {
+                Y = 0;
+            }
+
+            if (Y > Console.WindowHeight - 2)
+            {
+                Y = Console.WindowHeight - 2;
+            }
+
+            Moves = Moves + Math.Abs(dX) + Math.Abs(dY);
+
+        }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            int PlayerX = 10;
-            int PlayerY = 10;
+        
             ConsoleKeyInfo b;
-            int Licznik = 0;
-            int LicznikP = 0;
             Robot r1 = new Robot();
             r1.SetPosition(5, 5);
             Robot r2 = new Robot();
             r2.RadnomizePosition();
+            Player p1 = new Player();
+            
 
             while (true)
             {
                 Console.Clear();
-                Console.SetCursorPosition(PlayerX, PlayerY);
-                Console.Write("o");
+                p1.Draw();
                 r1.Draw();
                 r2.Draw();
                 Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                Console.Write("Bieganie w prawo albo w dol: " + LicznikP);
-                Console.Write(" | Bieganie gdziekolwiek: " + Licznik);
+                Console.Write("Bieganie: " + p1.Moves);
 
                 b = Console.ReadKey();
                 
-                if (b.Key == ConsoleKey.LeftArrow && PlayerX > 0)
+                if (b.Key == ConsoleKey.LeftArrow)
                 {
-                    PlayerX--;
-                    Licznik++;
+                    p1.MoveBy(-1, 0);
                 }
-                if (b.Key == ConsoleKey.RightArrow && PlayerX < Console.WindowWidth - 1)
+                if (b.Key == ConsoleKey.RightArrow)
                 {
-                    PlayerX++;
-                    Licznik++;
-                    LicznikP++;
+                    p1.MoveBy(1, 0);
                 }
-                if (b.Key == ConsoleKey.DownArrow && PlayerY < Console.WindowHeight - 2)
+                if (b.Key == ConsoleKey.DownArrow)
                 {
-                    PlayerY++;
-                    Licznik++;
-                    LicznikP++;
+                    p1.MoveBy(0, 1);
                 }
-                if (b.Key == ConsoleKey.UpArrow && PlayerY > 0)
+                if (b.Key == ConsoleKey.UpArrow)
                 {
-                    PlayerY--;
-                    Licznik++;
+                    p1.MoveBy(0, -1);
                 }
 
                // if (PlayerX < 0)
