@@ -8,37 +8,36 @@ namespace robots
 {
     class Robot
     {
-        int X = 0;
-        int Y = 0;
+        Position position = new Position(0, 0);
 
-        public void SetPosition(int newX, int newY)
+        public void SetPosition(Position newPosition)
         {
-            X = newX;
-            Y = newY;
+            position.X = newPosition.X;
+            position.Y = newPosition.Y;
         }
 
         public void RadnomizePosition()
         {
             Random rnd = new Random();
-            SetPosition(rnd.Next(1, 80), rnd.Next(1, 25));
+            Position np = new Position(rnd.Next(1, 80), rnd.Next(1, 25));
+            SetPosition(np);
         }
 
         public void Draw()
         {
-            Console.SetCursorPosition(X, Y);
+            Console.SetCursorPosition(position.X, position.Y);
             Console.Write("T");
         }
     }
 
     class Player
     {
-        int X = 10;
-        int Y = 10;
+        Position position = new Position(10, 10);
         public int Moves = 0;
 
         public void Draw()
         {
-            Console.SetCursorPosition(X, Y);
+            Console.SetCursorPosition(position.X, position.Y);
             if (Moves > 10)
                 Console.Write("ó");
             else
@@ -47,31 +46,30 @@ namespace robots
 
         public void MoveBy(int dX,  int dY)
         {
-            X = X + dX;
-            Y = Y + dY;
+            position.X += dX;
+            position.Y += dY;
 
-            if (X < 0)
-            {
-                X = 0;
-            }
-
-            if (X > Console.WindowWidth - 1)
-            {
-                X = Console.WindowWidth - 1;
-            }
-
-            if (Y < 0)
-            {
-                Y = 0;
-            }
-
-            if (Y > Console.WindowHeight - 2)
-            {
-                Y = Console.WindowHeight - 2;
-            }
+            if (position.X < 0)
+                position.X = 0;
+            if (position.X > Console.WindowWidth - 1)
+                position.X = Console.WindowWidth - 1;
+            if (position.Y < 0)
+                position.Y = 0;
+            if (position.Y > Console.WindowHeight - 2)
+                position.Y = Console.WindowHeight - 2;
 
             Moves = Moves + Math.Abs(dX) + Math.Abs(dY);
+        }
+    }
 
+    class Position
+    {
+        public int X;
+        public int Y;
+        public Position(int startX, int startY)
+        {
+            X = startX;
+            Y = startY;
         }
     }
 
@@ -79,10 +77,9 @@ namespace robots
     {
         static void Main(string[] args)
         {
-        
             ConsoleKeyInfo b;
             Robot r1 = new Robot();
-            r1.SetPosition(5, 5);
+            r1.SetPosition(new Position(5, 5));
             Robot r2 = new Robot();
             r2.RadnomizePosition();
             Player p1 = new Player();
