@@ -8,12 +8,12 @@ namespace robots
 {
     class Robot
     {
-        Position position = new Position(0, 0);
+        Position p = new Position(0, 0);
 
         public void SetPosition(Position newPosition)
         {
-            position.X = newPosition.X;
-            position.Y = newPosition.Y;
+            p.X = newPosition.X;
+            p.Y = newPosition.Y;
         }
 
         public void RadnomizePosition()
@@ -25,14 +25,26 @@ namespace robots
 
         public void Draw()
         {
-            Console.SetCursorPosition(position.X, position.Y);
+            Console.SetCursorPosition(p.X, p.Y);
             Console.Write("T");
+        }
+
+        public void MoveTowards(Position destination)
+        {
+            if (p.X < destination.X)
+                p.X++;
+            if (p.X > destination.X)
+                p.X--;
+            if (p.Y < destination.Y)
+                p.Y++;
+            if (p.Y > destination.Y)
+                p.Y--;
         }
     }
 
     class Player
     {
-        Position position = new Position(10, 10);
+        public Position position = new Position(10, 10);
         public int Moves = 0;
 
         public void Draw()
@@ -113,10 +125,13 @@ namespace robots
                     p1.MoveBy(0, -1);
                 }
 
-               // if (PlayerX < 0)
+                r1.MoveTowards(p1.position);
+                r2.MoveTowards(p1.position);
+
+                // if (PlayerX < 0)
                 //{
                 //    PlayerX = 0;
-               // }
+                // }
 
                 if (b.Key == ConsoleKey.Escape)
                 {
