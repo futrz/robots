@@ -107,19 +107,23 @@ namespace robots
             symbol = newSymbol;
         }
 
-        public void MoveBy(int dx,  int dy)
+        public void MoveBy(int dx,  int dy, Map map)
         {
-            p.x += dx;
-            p.y += dy;
+            Position newPosition = new Position(p);
+            newPosition.x += dx;
+            newPosition.y += dy;
 
-            if (p.x < 0)
-                p.x = 0;
-            if (p.x > Console.WindowWidth - 1)
-                p.x = Console.WindowWidth - 1;
-            if (p.y < 0)
-                p.y = 0;
-            if (p.y > Console.WindowHeight - 2)
-                p.y = Console.WindowHeight - 2;
+            if (newPosition.x < 0)
+                newPosition.x = 0;
+            if (newPosition.x > Console.WindowWidth - 1)
+                newPosition.x = Console.WindowWidth - 1;
+            if (newPosition.y < 0)
+                newPosition.y = 0;
+            if (newPosition.y > Console.WindowHeight - 2)
+                newPosition.y = Console.WindowHeight - 2;
+
+            if (map.GetField(newPosition.x, newPosition.y) == ' ')
+                p = newPosition;
 
             count = count + Math.Abs(dx) + Math.Abs(dy);
         }
@@ -135,9 +139,13 @@ namespace robots
             y = startY;
         }
         public Position() { }
+        public Position(Position position)
+        {
+            x = position.x;
+            y = position.y;
+        }
         public int DistanceTo(Position position)
-        {            
-            
+        {                  
             return Math.Abs(x - position.x) + Math.Abs(y - position.y);
         }
     }
@@ -197,27 +205,27 @@ namespace robots
                 players[1].DrawStatus();
 
                 Console.SetCursorPosition(0, Console.WindowHeight - 2);
-                Console.Write($"robot1: {robots[0].p.x} robot2: {robots[1].p.x} robot3: {robots[2].p.x}");
+                Console.Write($"{players[0].p.x} {players[0].p.y} {map.GetField(players[0].p.x, players[0].p.y)}");
 
                 b = Console.ReadKey();
                 
                 if (b.Key == ConsoleKey.LeftArrow)
-                    players[0].MoveBy(-1, 0);
+                    players[0].MoveBy(-1, 0, map);
                 if (b.Key == ConsoleKey.RightArrow)
-                    players[0].MoveBy(1, 0);
+                    players[0].MoveBy(1, 0, map);
                 if (b.Key == ConsoleKey.DownArrow)
-                    players[0].MoveBy(0, 1);
+                    players[0].MoveBy(0, 1, map);
                 if (b.Key == ConsoleKey.UpArrow)
-                    players[0].MoveBy(0, -1);
+                    players[0].MoveBy(0, -1, map);
 
                 if (b.Key == ConsoleKey.A)
-                    players[1].MoveBy(-1, 0);
+                    players[1].MoveBy(-1, 0, map);
                 if (b.Key == ConsoleKey.D)
-                    players[1].MoveBy(1, 0);
+                    players[1].MoveBy(1, 0, map);
                 if (b.Key == ConsoleKey.W)
-                    players[1].MoveBy(0, -1);
+                    players[1].MoveBy(0, -1, map);
                 if (b.Key == ConsoleKey.S)
-                    players[1].MoveBy(0, 1);
+                    players[1].MoveBy(0, 1, map);
 
                 i = 0;
                 while (i < nRobots)
