@@ -41,8 +41,20 @@ namespace robots
         public char GetField(int x, int y)
         {
             if (x < 0 || y < 0 || y >= contents.Length || x >= contents[y].Length)
-                return ' ';
+                return '#';
             return contents[y][x];
         }
+
+        public int GetHeight()
+        {
+            return contents.Length;
+        }
+
+        public int GetWidth()
+        {
+            return contents[0].Length;
+        }
+
+        
     }
 }

@@ -2,154 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace robots
 {
-    public static class StaticRandom
-    {
-        private static int seed;
-
-        private static ThreadLocal<Random> threadLocal = new ThreadLocal<Random>
-            (() => new Random(Interlocked.Increment(ref seed)));
-
-        static StaticRandom()
-        {
-            seed = Environment.TickCount;
-        }
-
-        public static Random Instance { get { return threadLocal.Value; } }
-        public static int Next(int min, int max) { return Instance.Next(min, max); }
-    }
-
-    class Robot
-    {
-        public Position p = new Position(0, 0);
-
-        public void SetPosition(Position newPosition)
-        {
-            p.x = newPosition.x;
-            p.y = newPosition.y;
-        }
-
-        public void RadnomizePosition()
-        {
-            Position np = new Position(StaticRandom.Next(1, 80), StaticRandom.Next(1, 24));
-            SetPosition(np);
-        }
-
-        public void Draw()
-        {
-            Console.SetCursorPosition(p.x, p.y);
-            Console.Write("T");
-        }
-
-        public void MoveTowards(Position destination)
-        {
-            if (p.x < destination.x)
-                p.x++;
-            if (p.x > destination.x)
-                p.x--; 
-            if (p.y < destination.y)
-                p.y++;
-            if (p.y > destination.y)
-                p.y--;
-        }
-
-        public void MoveTowardsPlayer(Player player, Player player2)
-        {
-            if (player.p.DistanceTo(p) > player2.p.DistanceTo(p))
-                MoveTowards(player2.p);
-            else
-                MoveTowards(player.p);
-        }
-    }
-
-    class Player
-    {
-        public int count = 0;
-        string symbol;
-        string name;
-        int number;
-        public Position p;
-
-        public Player(int sx, int sy)
-        {
-            p = new Position(sx, sy);
-        }
-        public void Draw()
-        {
-            Console.SetCursorPosition(p.x, p.y);
-            Console.Write(symbol);
-        }
-        public void DrawStatus()
-        {
-            int statusX;
-            string status = $"{name}: [{p.x}, {p.y}] {count}";
-            if (number == 1)
-                statusX = 1;
-            else
-                statusX = Console.WindowWidth - status.Length - 1;
-            Console.SetCursorPosition(statusX, Console.WindowHeight - 1);
-            Console.Write(status);
-        }
-        public void SetNumber(int newNumber)
-        {
-            number = newNumber;
-        }
-        public void SetName(string newName)
-        {
-            name = newName;
-        }
-        public void SetSymbol(string newSymbol)
-        {
-            symbol = newSymbol;
-        }
-
-        public void MoveBy(int dx,  int dy, Map map)
-        {
-            Position newPosition = new Position(p);
-            newPosition.x += dx;
-            newPosition.y += dy;
-
-            if (newPosition.x < 0)
-                newPosition.x = 0;
-            if (newPosition.x > Console.WindowWidth - 1)
-                newPosition.x = Console.WindowWidth - 1;
-            if (newPosition.y < 0)
-                newPosition.y = 0;
-            if (newPosition.y > Console.WindowHeight - 2)
-                newPosition.y = Console.WindowHeight - 2;
-
-            if (map.GetField(newPosition.x, newPosition.y) == ' ')
-                p = newPosition;
-
-            count = count + Math.Abs(dx) + Math.Abs(dy);
-        }
-    }
-
-    class Position
-    {
-        public int x;
-        public int y;
-        public Position(int startX, int startY)
-        {
-            x = startX;
-            y = startY;
-        }
-        public Position() { }
-        public Position(Position position)
-        {
-            x = position.x;
-            y = position.y;
-        }
-        public int DistanceTo(Position position)
-        {                  
-            return Math.Abs(x - position.x) + Math.Abs(y - position.y);
-        }
-    }
-
     class Program
     {
 
@@ -157,7 +12,9 @@ namespace robots
         static void Main(string[] args)
         {
             Map map = new Map();
-            map.Load("C:\\wlochate\\programowanie\\robots\\robots\\mapa.txt");
+            map.Load("E:\\wlochate\\programowanie\\robots\\robots\\mapa.txt");
+
+            PathFinder path_finder = new PathFinder(map);
 
             int nRobots = 4;
             int i;
@@ -168,7 +25,7 @@ namespace robots
             while(i < nRobots)
             {
                 robots[i] = new Robot();
-                robots[i].RadnomizePosition();
+                robots[i].RadnomizePosition(map.GetWidth(), map.GetHeight());
                 i++;
             }
 
@@ -191,6 +48,9 @@ namespace robots
                 Console.Clear();
 
                 map.Draw();
+
+                path_finder.FindPathTo(players[0].p);
+                path_finder.Draw();
 
                 i = 0;
                 while (i < nRobots)
@@ -230,7 +90,7 @@ namespace robots
                 i = 0;
                 while (i < nRobots)
                 {
-                    robots[i].MoveTowardsPlayer(players[0], players[1]);
+                    robots[i].MoveTowardsPlayer(path_finder);
                     i++;
                 }
 
