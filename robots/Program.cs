@@ -14,18 +14,28 @@ namespace robots
             Map map = new Map();
             map.Load("E:\\wlochate\\programowanie\\robots\\robots\\mapa.txt");
 
-            PathFinder path_finder = new PathFinder(map);
+            PathFinder pathFinder = new PathFinder(map);
 
             int nRobots = 4;
             int i;
 
-            Robot[] robots = new Robot[nRobots];
+            GameObject[] gameObjects = new GameObject[100];
 
             i = 0;
             while(i < nRobots)
             {
-                robots[i] = new Robot();
-                robots[i].RadnomizePosition(map.GetWidth(), map.GetHeight());
+                gameObjects[i] = new Robot();
+                gameObjects[i].RadnomizePosition(map.GetWidth(), map.GetHeight());
+                i++;
+            }
+
+            int nItems = 4;
+
+            i = nRobots;
+            while (i < nItems + nRobots)
+            {
+                gameObjects[i] = new Item();
+                gameObjects[i].RadnomizePosition(map.GetWidth(), map.GetHeight());
                 i++;
             }
 
@@ -49,16 +59,17 @@ namespace robots
 
                 map.Draw();
 
-                path_finder.FindPathTo(players[0].p);
-                path_finder.Draw();
+                pathFinder.FindPathTo(players[0].p);
+                pathFinder.Draw();
 
                 i = 0;
-                while (i < nRobots)
+                while (i < gameObjects.Length)
                 {
-                    robots[i].Draw();
+                    if (gameObjects[i] != null)
+                        gameObjects[i].Draw();
                     i++;
                 }
-
+               
                 players[0].Draw();
                 players[0].DrawStatus();
                 players[1].Draw();
@@ -88,9 +99,13 @@ namespace robots
                     players[1].MoveBy(0, 1, map);
 
                 i = 0;
-                while (i < nRobots)
+                while (i < gameObjects.Length)
                 {
-                    robots[i].MoveTowardsPlayer(path_finder);
+                    if (gameObjects[i] != null && gameObjects[i] is Robot)
+                    {
+                        Robot r = (Robot)gameObjects[i];
+                        r.MoveTowardsPlayer(pathFinder);
+                    }
                     i++;
                 }
 

@@ -6,26 +6,11 @@ using System.Threading.Tasks;
 
 namespace robots
 {
-    class Robot
+    class Robot : GameObject
     {
-        public Position p = new Position(0, 0);
-
-        public void SetPosition(Position newPosition)
+        public Robot()
         {
-            p.x = newPosition.x;
-            p.y = newPosition.y;
-        }
-
-        public void RadnomizePosition(int width, int height)
-        {
-            Position np = new Position(StaticRandom.Next(0, width - 1), StaticRandom.Next(0, height - 1));
-            SetPosition(np);
-        }
-
-        public void Draw()
-        {
-            Console.SetCursorPosition(p.x, p.y);
-            Console.Write("T");
+            symbol = "T";
         }
 
         public void MoveTowards(Position destination)
