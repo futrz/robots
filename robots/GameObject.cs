@@ -8,7 +8,7 @@ namespace robots
 {
     class GameObject
     {
-        protected string symbol;
+        public string symbol;
         protected string name;
         public Position p = new Position(0, 0);
 
