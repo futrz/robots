@@ -18,16 +18,15 @@ namespace robots
 
             int nRobots = 4;
             int i;
-            int empty;
 
-            GameObject[] gameObjects = new GameObject[100];
+            List<GameObject> gameObjects = new List<GameObject>();
 
             i = 0;
             while(i < nRobots)
             {
-                empty = Array.IndexOf(gameObjects, null);
-                gameObjects[empty] = new Robot();
-                gameObjects[empty].RadnomizePosition(map.GetWidth(), map.GetHeight());
+                Robot r = new Robot();
+                r.RadnomizePosition(map.GetWidth(), map.GetHeight());
+                gameObjects.Add(r);
                 i++;
             }
 
@@ -36,9 +35,9 @@ namespace robots
             i = 0;
             while (i < nItems)
             {
-                empty = Array.IndexOf(gameObjects, null);
-                gameObjects[empty] = new Item();
-                gameObjects[empty].RadnomizePosition(map.GetWidth(), map.GetHeight());
+                Item it = new Item();
+                it.RadnomizePosition(map.GetWidth(), map.GetHeight());
+                gameObjects.Add(it);
                 i++;
             }
 
@@ -58,25 +57,19 @@ namespace robots
                 pathFinder.FindPathTo(player.p);
                 pathFinder.Draw();
 
-                i = 0;
-                while (i < gameObjects.Length)
-                {
-                    if (gameObjects[i] != null)
-                        gameObjects[i].Draw();
-                    i++;
-                }
-               
+                foreach(GameObject go in gameObjects)
+                    go.Draw();
+                
                 player.Draw();
                 player.DrawStatus();
 
                 Console.SetCursorPosition(0, Console.WindowHeight - 10);
                 Console.Write("Znalezione rzeczy");
-                i = 0;
-                while (i < gameObjects.Length)
+
+                foreach (GameObject go in gameObjects)
                 {
-                    if (gameObjects[i] != null && gameObjects[i].p.x == player.p.x && gameObjects[i].p.y == player.p.y)
-                        Console.Write($"\n{gameObjects[i].symbol}");
-                    i++;
+                    if (go.p.x == player.p.x && go.p.y == player.p.y)
+                        Console.Write($"\n{go.symbol}");
                 }
 
                 Console.SetCursorPosition(0, Console.WindowHeight - 2);
@@ -93,15 +86,13 @@ namespace robots
                 if (b.Key == ConsoleKey.UpArrow)
                     player.MoveBy(0, -1, map);
 
-                i = 0;
-                while (i < gameObjects.Length)
+                foreach (GameObject go in gameObjects)
                 {
-                    if (gameObjects[i] != null && gameObjects[i] is Robot)
+                    if (go is Robot)
                     {
-                        Robot r = (Robot)gameObjects[i];
+                        Robot r = (Robot)go;
                         r.MoveTowardsPlayer(pathFinder);
                     }
-                    i++;
                 }
 
 
